@@ -1,7 +1,1 @@
-=== Elementor Pro ===
-Contributors: elemntor
-Tags: page builder, editor, landing page, drag-and-drop, elementor, visual editor, wysiwyg, design, maintenance mode, coming soon, under construction, website builder, landing page builder, front-end builder
-Requires at least: 6.7
-Tested up to: 6.9
-Requires PHP: 7.4
-Requires Elementor: 3.34
+This plugin enables GPL features of Elementor Pro: widgets, theme builder, dynamic colors and content, forms & popup builder, and more.
