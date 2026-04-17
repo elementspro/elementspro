@@ -18,15 +18,14 @@ use ElementorPro\License\API;
 use ElementorPro\License\Updater;
 use Exception;
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
 /**
  * Main class plugin
  */
-class Plugin
-{
+class Plugin {
 
 	/**
 	 * @var Plugin
@@ -103,11 +102,10 @@ class Plugin
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function __clone()
-	{
+	public function __clone() {
 		_doing_it_wrong(
 			__FUNCTION__,
-			sprintf('Cloning instances of the singleton "%s" class is forbidden.', get_class($this)), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			sprintf( 'Cloning instances of the singleton "%s" class is forbidden.', get_class( $this ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'1.0.0'
 		);
 	}
@@ -118,11 +116,10 @@ class Plugin
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function __wakeup()
-	{
+	public function __wakeup() {
 		_doing_it_wrong(
 			__FUNCTION__,
-			sprintf('Unserializing instances of the singleton "%s" class is forbidden.', get_class($this)), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			sprintf( 'Unserializing instances of the singleton "%s" class is forbidden.', get_class( $this ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'1.0.0'
 		);
 	}
@@ -131,63 +128,59 @@ class Plugin
 	 * @return \Elementor\Plugin
 	 */
 
-	public static function elementor()
-	{
+	public static function elementor() {
 		return \Elementor\Plugin::$instance;
 	}
 
 	/**
 	 * @return Plugin
 	 */
-	public static function instance(): Plugin
-	{
-		if (is_null(self::$_instance)) {
+	public static function instance(): Plugin {
+		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 		}
 
 		return self::$_instance;
 	}
 
-	public function autoload($class)
-	{
-		if (0 !== strpos($class, __NAMESPACE__)) {
+	public function autoload( $class ) {
+		if ( 0 !== strpos( $class, __NAMESPACE__ ) ) {
 			return;
 		}
 
-		$has_class_alias = isset($this->classes_aliases[$class]);
+		$has_class_alias = isset( $this->classes_aliases[ $class ] );
 
 		// Backward Compatibility: Save old class name for set an alias after the new class is loaded
-		if ($has_class_alias) {
-			$class_alias_name = $this->classes_aliases[$class];
+		if ( $has_class_alias ) {
+			$class_alias_name = $this->classes_aliases[ $class ];
 			$class_to_load = $class_alias_name;
 		} else {
 			$class_to_load = $class;
 		}
 
-		if (!class_exists($class_to_load)) {
+		if ( ! class_exists( $class_to_load ) ) {
 			$filename = strtolower(
 				preg_replace(
-					['/^' . __NAMESPACE__ . '\\\/', '/([a-z])([A-Z])/', '/_/', '/\\\/'],
-					['', '$1-$2', '-', DIRECTORY_SEPARATOR],
+					[ '/^' . __NAMESPACE__ . '\\\/', '/([a-z])([A-Z])/', '/_/', '/\\\/' ],
+					[ '', '$1-$2', '-', DIRECTORY_SEPARATOR ],
 					$class_to_load
 				)
 			);
 			$filename = ELEMENTOR_PRO_PATH . $filename . '.php';
 
-			if (is_readable($filename)) {
-				include($filename);
+			if ( is_readable( $filename ) ) {
+				include( $filename );
 			}
 		}
 
-		if ($has_class_alias) {
-			class_alias($class_alias_name, $class);
+		if ( $has_class_alias ) {
+			class_alias( $class_alias_name, $class );
 		}
 	}
 
-	public static function get_frontend_file_url($frontend_file_name, $custom_file)
-	{
-		if ($custom_file) {
-			$frontend_file = self::get_frontend_file($frontend_file_name);
+	public static function get_frontend_file_url( $frontend_file_name, $custom_file ) {
+		if ( $custom_file ) {
+			$frontend_file = self::get_frontend_file( $frontend_file_name );
 
 			$frontend_file_url = $frontend_file->get_url();
 		} else {
@@ -197,10 +190,9 @@ class Plugin
 		return $frontend_file_url;
 	}
 
-	public static function get_frontend_file_path($frontend_file_name, $custom_file)
-	{
-		if ($custom_file) {
-			$frontend_file = self::get_frontend_file($frontend_file_name);
+	public static function get_frontend_file_path( $frontend_file_name, $custom_file ) {
+		if ( $custom_file ) {
+			$frontend_file = self::get_frontend_file( $frontend_file_name );
 
 			$frontend_file_path = $frontend_file->get_path();
 		} else {
@@ -214,12 +206,9 @@ class Plugin
 	 * @deprecated 3.26.0
 	 * @return void
 	 */
-	public function enqueue_styles(): void
-	{
-	}
+	public function enqueue_styles(): void {}
 
-	public function enqueue_frontend_scripts()
-	{
+	public function enqueue_frontend_scripts() {
 		$suffix = $this->get_assets_suffix();
 
 		wp_enqueue_script(
@@ -230,9 +219,9 @@ class Plugin
 			true
 		);
 
-		wp_set_script_translations('elementor-pro-frontend', 'elementor-pro', ELEMENTOR_PRO_PATH . 'languages');
+		wp_set_script_translations( 'elementor-pro-frontend', 'elementor-pro', ELEMENTOR_PRO_PATH . 'languages' );
 
-		wp_enqueue_script('pro-elements-handlers');
+		wp_enqueue_script( 'pro-elements-handlers' );
 
 		$assets_url = ELEMENTOR_PRO_ASSETS_URL;
 
@@ -246,17 +235,17 @@ class Plugin
 		 *
 		 * @param string $assets_url Elementor Pro assets URL.
 		 */
-		$assets_url = apply_filters('elementor_pro/frontend/assets_url', $assets_url);
+		$assets_url = apply_filters( 'elementor_pro/frontend/assets_url', $assets_url );
 
 		$locale_settings = [
-			'ajaxurl' => admin_url('admin-ajax.php'),
-			'nonce' => wp_create_nonce('elementor-pro-frontend'),
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'nonce' => wp_create_nonce( 'elementor-pro-frontend' ),
 			'urls' => [
 				'assets' => $assets_url,
 				'rest' => get_rest_url(),
 			],
 			'settings' => [
-				'lazy_load_background_images' => ('1' === get_option('elementor_lazy_load_background_images', '1')),
+				'lazy_load_background_images' => ( '1' === get_option( 'elementor_lazy_load_background_images', '1' ) ),
 			],
 		];
 
@@ -273,7 +262,7 @@ class Plugin
 		 *
 		 * @param array $locale_settings Localized frontend settings.
 		 */
-		$locale_settings = apply_filters('elementor_pro/frontend/localize_settings', $locale_settings);
+		$locale_settings = apply_filters( 'elementor_pro/frontend/localize_settings', $locale_settings );
 
 		Utils::print_js_config(
 			'elementor-pro-frontend',
@@ -282,8 +271,7 @@ class Plugin
 		);
 	}
 
-	public function register_frontend_scripts()
-	{
+	public function register_frontend_scripts() {
 		$suffix = $this->get_assets_suffix();
 
 		wp_register_script(
@@ -326,13 +314,12 @@ class Plugin
 			true
 		);
 
-		if ($this->is_assets_loader_exist()) {
+		if ( $this->is_assets_loader_exist() ) {
 			$this->register_assets();
 		}
 	}
 
-	public function register_preview_scripts()
-	{
+	public function register_preview_scripts() {
 		$suffix = $this->get_assets_suffix();
 
 		wp_enqueue_script(
@@ -347,25 +334,23 @@ class Plugin
 		);
 	}
 
-	public function get_responsive_stylesheet_templates($templates)
-	{
-		$templates_paths = glob($this->get_responsive_templates_path() . '*.css');
+	public function get_responsive_stylesheet_templates( $templates ) {
+		$templates_paths = glob( $this->get_responsive_templates_path() . '*.css' );
 
-		foreach ($templates_paths as $template_path) {
-			$file_name = 'custom-pro-' . basename($template_path);
+		foreach ( $templates_paths as $template_path ) {
+			$file_name = 'custom-pro-' . basename( $template_path );
 
-			$templates[$file_name] = $template_path;
+			$templates[ $file_name ] = $template_path;
 		}
 
 		return $templates;
 	}
 
-	public function on_elementor_init()
-	{
+	public function on_elementor_init() {
 		$this->modules_manager = new Modules_Manager();
 
 		/** TODO: BC for Elementor v2.4.0 */
-		if (class_exists('\Elementor\Core\Upgrade\Manager')) {
+		if ( class_exists( '\Elementor\Core\Upgrade\Manager' ) ) {
 			$this->upgrade = UpgradeManager::instance();
 		}
 
@@ -377,79 +362,73 @@ class Plugin
 		 *
 		 * @since 1.0.0
 		 */
-		do_action('elementor_pro/init');
+		do_action( 'elementor_pro/init' );
 	}
 
 	/**
 	 * @param \Elementor\Core\Base\Document $document
 	 */
-	public function on_document_save_version($document)
-	{
-		$document->update_meta('_elementor_pro_version', ELEMENTOR_PRO_VERSION);
+	public function on_document_save_version( $document ) {
+		$document->update_meta( '_elementor_pro_version', ELEMENTOR_PRO_VERSION );
 	}
 
-	private function get_frontend_depends()
-	{
+	private function get_frontend_depends() {
 		$frontend_depends = [
 			'elementor-pro-webpack-runtime',
 			'elementor-frontend-modules',
 		];
 
-		if (!$this->is_assets_loader_exist()) {
+		if ( ! $this->is_assets_loader_exist() ) {
 			$frontend_depends[] = 'elementor-sticky';
 		}
 
 		return $frontend_depends;
 	}
 
-	private static function get_responsive_templates_path()
-	{
+	private static function get_responsive_templates_path() {
 		return ELEMENTOR_PRO_ASSETS_PATH . 'css/templates/';
 	}
 
-	private function add_subscription_template_access_level_to_settings($settings)
-	{
+	private function add_subscription_template_access_level_to_settings( $settings ) {
 		// Core >= 3.2.0
-		if (isset($settings['library_connect']['current_access_level'])) {
+		if ( isset( $settings['library_connect']['current_access_level'] ) ) {
 			$settings['library_connect']['current_access_level'] = API::get_library_access_level();
 		}
 
 		// Core >= 3.18.0
-		if (isset($settings['library_connect']['current_access_tier'])) {
+		if ( isset( $settings['library_connect']['current_access_tier'] ) ) {
 			$settings['library_connect']['current_access_tier'] = API::get_access_tier();
 		}
 
 		// Core >= 3.32.0
-		if (isset($settings['library_connect']['plan_type'])) {
+		if ( isset( $settings['library_connect']['plan_type'] ) ) {
 			$settings['library_connect']['plan_type'] = API::get_plan_type();
 		}
 
 		return $settings;
 	}
 
-	private function setup_hooks()
-	{
-		add_action('elementor/init', [$this, 'on_elementor_init']);
+	private function setup_hooks() {
+		add_action( 'elementor/init', [ $this, 'on_elementor_init' ] );
 
-		add_action('elementor/frontend/before_register_scripts', [$this, 'register_frontend_scripts']);
-		add_action('elementor/preview/enqueue_scripts', [$this, 'register_preview_scripts']);
+		add_action( 'elementor/frontend/before_register_scripts', [ $this, 'register_frontend_scripts' ] );
+		add_action( 'elementor/preview/enqueue_scripts', [ $this, 'register_preview_scripts' ] );
 
-		add_action('elementor/frontend/before_enqueue_scripts', [$this, 'enqueue_frontend_scripts']);
+		add_action( 'elementor/frontend/before_enqueue_scripts', [ $this, 'enqueue_frontend_scripts' ] );
 
-		add_filter('elementor/core/breakpoints/get_stylesheet_template', [$this, 'get_responsive_stylesheet_templates']);
-		add_action('elementor/document/save_version', [$this, 'on_document_save_version']);
+		add_filter( 'elementor/core/breakpoints/get_stylesheet_template', [ $this, 'get_responsive_stylesheet_templates' ] );
+		add_action( 'elementor/document/save_version', [ $this, 'on_document_save_version' ] );
 
-		add_filter('elementor/editor/localize_settings', function ($settings) {
-			return $this->add_subscription_template_access_level_to_settings($settings);
-		}, 11 /** After Elementor Core (Library) */);
+		add_filter( 'elementor/editor/localize_settings', function ( $settings ) {
+			return $this->add_subscription_template_access_level_to_settings( $settings );
+		}, 11 /** After Elementor Core (Library) */ );
 
-		add_filter('elementor/common/localize_settings', function ($settings) {
-			return $this->add_subscription_template_access_level_to_settings($settings);
-		}, 11 /** After Elementor Core (Library) */);
+		add_filter( 'elementor/common/localize_settings', function ( $settings ) {
+			return $this->add_subscription_template_access_level_to_settings( $settings );
+		}, 11 /** After Elementor Core (Library) */ );
 	}
 
-	private function get_assets()
-	{
+	private function get_assets() {
 		$suffix = $this->get_assets_suffix();
 
 		return [
@@ -465,27 +444,24 @@ class Plugin
 		];
 	}
 
-	private function register_assets()
-	{
+	private function register_assets() {
 		$assets = $this->get_assets();
 
-		if ($assets) {
-			self::elementor()->assets_loader->add_assets($assets);
+		if ( $assets ) {
+			self::elementor()->assets_loader->add_assets( $assets );
 		}
 	}
 
-	private function is_assets_loader_exist()
-	{
-		return !!self::elementor()->assets_loader;
+	private function is_assets_loader_exist() {
+		return ! ! self::elementor()->assets_loader;
 	}
 
 	/**
 	 * Plugin constructor.
 	 * @throws Exception
 	 */
-	private function __construct()
-	{
-		spl_autoload_register([$this, 'autoload']);
+	private function __construct() {
+		spl_autoload_register( [ $this, 'autoload' ] );
 
 		Compatibility::register_actions();
 
@@ -503,13 +479,13 @@ class Plugin
 
 		$this->php_api = new PHP_Api();
 
-		if (is_user_logged_in()) {
+		if ( is_user_logged_in() ) {
 			$this->integrations = new Integrations_Manager(); // TODO: This one is safe to move out of the condition.
 
 			$this->notifications = new Notifications_Manager();
 		}
 
-		if (is_admin()) {
+		if ( is_admin() ) {
 			$this->admin = new Admin();
 
 			$this->license_admin->register_actions();
@@ -519,43 +495,40 @@ class Plugin
 
 		// The `Updater` class is responsible for adding some updates related filters, including auto updates, and since
 		// WP crons don't run on admin mode, it should not depend on it.
-		require_once __DIR__ . '/updater/updater.php';
+				require_once __DIR__ . '/updater/updater.php';
 		$config = array(
-			'slug' => 'elements-pro.php',
-			'plugin_basename' => 'elements-pro/elements-pro.php',
+			'slug'               => 'elements-pro.php',
+			'plugin_basename'    => 'elements-pro/elements-pro.php',
 			'proper_folder_name' => 'elements-pro',
-			'api_url' => 'https://api.github.com/repos/elementspro/elementspro',
-			'raw_url' => 'https://raw.githubusercontent.com/elementspro/elementspro/main',
-			'github_url' => 'https://github.com/elementspro/elementspro',
-			'zip_url' => 'https://github.com/elementspro/elementspro/releases/download/{release_version}/elements-pro.zip',
-			'sslverify' => true,
-			'requires' => '5.0',
-			'tested' => '6.7',
-			'readme' => 'README.md',
-			'access_token' => '',
+			'api_url'            => 'https://api.github.com/repos/elementspro/elementspro',
+			'raw_url'            => 'https://raw.githubusercontent.com/elementspro/elementspro/main',
+			'github_url'         => 'https://github.com/elementspro/elementspro',
+			'zip_url'            => 'https://github.com/elementspro/elementspro/releases/download/{release_version}/elements-pro.zip',
+			'sslverify'          => true,
+			'requires'           => '5.0',
+			'tested'             => '6.7',
+			'readme'             => 'README.md',
+			'access_token'       => '',
 		);
-		new \ElementorPro\Core\Updater\Updater($config);
+		new \ElementorPro\Core\Updater\Updater( $config );
 	}
 
-	private function get_assets_suffix()
-	{
+	private function get_assets_suffix() {
 		return Utils::is_script_debug() ? '' : '.min';
 	}
 
-	private static function get_frontend_file($frontend_file_name)
-	{
+	private static function get_frontend_file( $frontend_file_name ) {
 		$template_file_path = self::get_responsive_templates_path() . $frontend_file_name;
 
-		return self::elementor()->frontend->get_frontend_file($frontend_file_name, 'custom-pro-', $template_file_path);
+		return self::elementor()->frontend->get_frontend_file( $frontend_file_name, 'custom-pro-', $template_file_path );
 	}
 
-	final public static function get_title()
-	{
-		return esc_html__('Elements Pro', 'elements-pro');
+	final public static function get_title() {
+		return esc_html__( 'Elements Pro', 'elements-pro' );
 	}
 }
 
-if (!defined('ELEMENTOR_PRO_TESTS')) {
+if ( ! defined( 'ELEMENTOR_PRO_TESTS' ) ) {
 	// In tests we run the instance manually.
 	Plugin::instance();
 }

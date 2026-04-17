@@ -87,8 +87,10 @@ class Form extends Form_Base {
 				'dismissible' => false,
 				'heading' => esc_html__( 'Atomic form', 'elementor-pro' ),
 				'content' => '<style>'
+					. '.elementor-control-atomic_form_v3_promotion .elementor-control-notice { gap: 6px; padding: 11px 13px; margin-block-start: -10px; }'
+					. '.elementor-control-atomic_form_v3_promotion .elementor-control-notice-main { padding-inline-end: 12px; }'
 					. '.elementor-control-atomic_form_v3_promotion .elementor-control-notice-main-heading { font-weight: normal; font-size: 13px; }'
-					. '.elementor-control-atomic_form_v3_promotion .e-btn { background: transparent; }'
+					. '.elementor-control-atomic_form_v3_promotion .e-btn { background: transparent; padding: 0; font-weight: 800; }'
 					. '.elementor-control-atomic_form_v3_promotion .e-btn:hover { background: transparent; }'
 					. '.elementor-control-atomic_form_v3_promotion .e-btn-1 { color: #69727D; }'
 					. '.elementor-control-atomic_form_v3_promotion .e-btn-2 { color: #3F6AD8; }'

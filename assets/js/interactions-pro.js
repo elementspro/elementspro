@@ -1,4 +1,4 @@
-/*! elementor-pro - v4.0.0 - 01-04-2026 */
+/*! elementor-pro - v4.0.0 - 13-04-2026 */
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -3562,11 +3562,9 @@ function initInteractions() {
         if (!elementId || !interactions || !Array.isArray(interactions)) {
           return;
         }
-        const element = document.querySelector(`[data-interaction-id="${elementId}"]`);
-        if (!element) {
-          return;
-        }
-        processElementInteractions(element, interactions, animateFunc, inViewFunc, scrollFunc, hoverFunc, clickFunc);
+        document.querySelectorAll(`[data-interaction-id="${elementId}"]`).forEach(element => {
+          processElementInteractions(element, interactions, animateFunc, inViewFunc, scrollFunc, hoverFunc, clickFunc);
+        });
       });
       return;
     }
