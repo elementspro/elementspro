@@ -3,13 +3,13 @@
  * Plugin Name: Elements Pro
  * Description: Adds professional features for sites using the Elementor page builder.
  * Plugin URI: https://go.elementor.com/wp-dash-wp-plugins-author-uri/
- * Version: 4.0.2
+ * Version: 4.0.4
  * Author: Elements Pro
  * Author URI: https://github.com/elementspro/elementspro
  * Requires PHP: 7.4
  * Requires at least: 6.7
  * Requires Plugins: elementor
- * Elementor tested up to: 4.0.2-ga
+ * Elementor tested up to: 4.0.4-ga
  * Text Domain: elements-pro
  */
 
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'ELEMENTOR_PRO_VERSION', '4.0.2' );
+define( 'ELEMENTOR_PRO_VERSION', '4.0.4' );
 
 /**
  * All versions should be `major.minor`, without patch, in order to compare them properly.

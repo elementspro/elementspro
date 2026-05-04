@@ -1,5 +1,17 @@
 # Elementor Pro - by Elementor.com
 
+#### 4.0.4 - 2026-04-28
+
+* Fix: Flexbox and Div Block do not work with display conditions - Atomic Editor
+* Fix: Custom CSS editor not editable in RTL websites - Atomic Editor
+
+#### 4.0.3 - 2026-04-20
+
+* Tweak: Updated base style font styling in Atomic Form - Atomic Editor
+* Fix: Submit button not working inside popups in Atomic Form - Atomic Editor
+* Fix: Forms fail to send when using ACF Email dynamic tag - Atomic Editor
+* Fix: Custom CSS editor not editable in RTL websites - Atomic Editor
+
 #### 4.0.2 - 2026-04-13
 
 * Fix: Interactions apply only to the first matching element instead of all instances on the page - Atomic Editor

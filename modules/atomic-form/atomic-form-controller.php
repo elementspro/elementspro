@@ -1,6 +1,7 @@
 <?php
 namespace ElementorPro\Modules\AtomicForm;
 
+use Elementor\Modules\AtomicWidgets\DynamicTags\Dynamic_Prop_Type;
 use Elementor\Utils as ElementorUtils;
 use ElementorPro\Modules\AtomicForm\Actions\Action_Runner;
 use ElementorPro\Modules\AtomicWidgets\Settings_Resolver;
@@ -191,6 +192,8 @@ class Atomic_Form_Controller {
 
 		$settings = $form_element['settings'] ?? [];
 
+		$settings = $this->resolve_dynamic_tags_in_settings( $settings, $post_id );
+
 		$resolved = Settings_Resolver::resolve( $settings );
 
 		if ( ! isset( $resolved['actions-after-submit'] ) && isset( $resolved['email'] ) ) {
@@ -198,6 +201,47 @@ class Atomic_Form_Controller {
 		}
 
 		return $resolved;
+	}
+
+	/**
+	 * @param array|string $value
+	 * @param int $post_id
+	 * @return array|string|null
+	 */
+	private function resolve_dynamic_tags_in_settings( $value, int $post_id ) {
+		if ( ! is_array( $value ) ) {
+			return $value;
+		}
+
+		if ( Dynamic_Prop_Type::is_dynamic_prop_value( $value ) ) {
+			if ( ! empty( $value['disabled'] ) ) {
+				return null;
+			}
+
+			$tag_data = $value['value'] ?? [];
+			$tag_name = $tag_data['name'] ?? '';
+			$tag_settings = $tag_data['settings'] ?? [];
+
+			if ( empty( $tag_name ) ) {
+				return null;
+			}
+
+			Plugin::elementor()->db->switch_to_post( $post_id );
+
+			try {
+				return Plugin::elementor()->dynamic_tags->get_tag_data_content(
+					null,
+					$tag_name,
+					$tag_settings
+				);
+			} finally {
+				Plugin::elementor()->db->restore_current_post();
+			}
+		}
+
+		return array_map( function ( $item ) use ( $post_id ) {
+			return $this->resolve_dynamic_tags_in_settings( $item, $post_id );
+		}, $value );
 	}
 
 	private function send_invalid_form_response(): void {

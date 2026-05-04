@@ -131,7 +131,6 @@ class Textarea extends Atomic_Widget_Base {
 					->add_props( [
 						'border-radius' => $border_radius_value,
 						'border-color' => $border_color_value,
-						'font-family' => String_Prop_Type::generate( 'Poppins' ),
 						'font-size' => Size_Prop_Type::generate( [
 							'size' => 12,
 							'unit' => 'px',

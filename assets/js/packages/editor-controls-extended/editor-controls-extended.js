@@ -585,6 +585,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _elementor_ui__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_elementor_ui__WEBPACK_IMPORTED_MODULE_0__);
 
 const EditorWrapper = (0,_elementor_ui__WEBPACK_IMPORTED_MODULE_0__.styled)((0,_elementor_ui__WEBPACK_IMPORTED_MODULE_0__.Box))`
+	/* @noflip */
+	direction: ltr;
 	border: 1px solid var( --e-a-border-color );
 	border-radius: 8px;
 	padding: 4px;
@@ -808,7 +810,8 @@ const CssEditor = ({
       onClick: handleReset
     })] : []
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_elementor_ui__WEBPACK_IMPORTED_MODULE_3__.Box, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_css_editor_styles__WEBPACK_IMPORTED_MODULE_6__.EditorWrapper, {
-    ref: containerRef
+    ref: containerRef,
+    dir: "ltr"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_monaco_editor_react__WEBPACK_IMPORTED_MODULE_4__.Editor, {
     height: "100%",
     language: "css",

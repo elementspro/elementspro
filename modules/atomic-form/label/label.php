@@ -110,7 +110,6 @@ class Label extends Atomic_Widget_Base {
 			'size' => 14,
 			'unit' => 'px',
 		] );
-		$font_family_value = String_Prop_Type::generate( 'Poppins' );
 
 		return [
 			'base' => Style_Definition::make()
@@ -118,7 +117,6 @@ class Label extends Atomic_Widget_Base {
 					Style_Variant::make()
 					->add_props( [
 						'color' => $text_color_value,
-						'font-family' => $font_family_value,
 						'font-size' => $font_size_value,
 					] ),
 				),
